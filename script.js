@@ -31,6 +31,9 @@ const grafRokDoSelect = document.getElementById("graf-rok-do");
 const grafUkazovatelSelect = document.getElementById("graf-ukazovatel");
 const grafCanvas = document.getElementById("grafVyvoja");
 
+const mapTooltip = document.getElementById("map-tooltip");
+
+
 const mappingKrajov = {
   SKBL: "Bratislavský kraj",
   SKTA: "Trnavský kraj",
@@ -275,7 +278,7 @@ function zobrazSlovensko() {
   objasneneSpan.textContent = sucet.objasnene.toLocaleString("sk-SK");
   percentoSpan.textContent = percento.toLocaleString("sk-SK", {
   minimumFractionDigits: 2,
-  maximumFractionDigits: 2 }) + " %";
+  maximumFractionDigits: 2 }) + "%";
   skodaSpan.textContent = sucet.skoda.toLocaleString("sk-SK") + "€";
   alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
   drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
@@ -283,8 +286,8 @@ function zobrazSlovensko() {
 
   indexKriminalitySpan.textContent = populaciaSpolu > 0
     ? index.toLocaleString("sk-SK", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
       })
     : "-";
 }
@@ -318,7 +321,7 @@ function zobrazKraj(krajElement) {
     objasneneSpan.textContent = sucet.objasnene.toLocaleString("sk-SK");
     percentoSpan.textContent = percento.toLocaleString("sk-SK", {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2}) + " %";
+    maximumFractionDigits: 2}) + "%";
     skodaSpan.textContent = sucet.skoda.toLocaleString("sk-SK") + "€";
     alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
     drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
@@ -327,8 +330,8 @@ function zobrazKraj(krajElement) {
       const index = (sucet.zistene / zaznamPop.obyvatelia) * 1000;
       obyvateliaSpan.textContent = zaznamPop.obyvatelia.toLocaleString("sk-SK");
       indexKriminalitySpan.textContent = index.toLocaleString("sk-SK", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
       });
     } else {
       obyvateliaSpan.textContent = "-";
@@ -521,6 +524,95 @@ function spocitajZaznamy(zaznamy) {
     alkohol: 0,
     drogy: 0
   });
+}
+
+function formatCeleCislo(hodnota) {
+  return hodnota.toLocaleString("sk-SK");
+}
+
+function formatDesatinneCislo(hodnota) {
+  return hodnota.toLocaleString("sk-SK", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function vytvorObsahTooltipu(krajElement) {
+  const nazov = mappingKrajov[krajElement.id];
+  const vybranyRok = Number(rokSelect.value);
+  const vybraneDruhy = getVybraneDruhy();
+
+  const zaznamy = data.filter(item =>
+    item.kraj === nazov &&
+    item.rok === vybranyRok &&
+    vybraneDruhy.includes(item.druh_kriminality)
+  );
+
+  const zaznamPop = populaciaData.find(item =>
+    item.kraj === nazov &&
+    item.rok === vybranyRok
+  );
+
+  if (zaznamy.length === 0) {
+    return `
+      <div class="tooltip-title">${nazov}</div>
+      <div class="tooltip-row">
+        <span class="tooltip-label">Rok:</span>
+        <span class="tooltip-value">${vybranyRok}</span>
+      </div>
+      <div class="tooltip-row">
+        <span class="tooltip-label">Údaje:</span>
+        <span class="tooltip-value">Nenašlo sa</span>
+      </div>
+    `;
+  }
+
+  const sucet = spocitajZaznamy(zaznamy);
+
+  const index = zaznamPop && zaznamPop.obyvatelia > 0
+    ? (sucet.zistene / zaznamPop.obyvatelia) * 1000
+    : null;
+
+  return `
+    <div class="tooltip-title">${nazov}</div>
+
+    <div class="tooltip-row">
+      <span class="tooltip-label">Rok:</span>
+      <span class="tooltip-value">${vybranyRok}</span>
+    </div>
+
+    <div class="tooltip-row">
+      <span class="tooltip-label">Druh:</span>
+      <span class="tooltip-value">${zobrazTextVyberu(vybraneDruhy)}</span>
+    </div>
+
+    <div class="tooltip-row">
+      <span class="tooltip-label">Zistené:</span>
+      <span class="tooltip-value">${formatCeleCislo(sucet.zistene)}</span>
+    </div>
+
+    <div class="tooltip-row">
+      <span class="tooltip-label">Index:</span>
+      <span class="tooltip-value">${index !== null ? formatDesatinneCislo(index) : "-"}</span>
+    </div>
+  `;
+}
+
+function posunTooltip(event) {
+  const offset = 14;
+
+  mapTooltip.style.left = event.clientX + offset + "px";
+  mapTooltip.style.top = event.clientY + offset + "px";
+
+  const tooltipRect = mapTooltip.getBoundingClientRect();
+
+  if (tooltipRect.right > window.innerWidth) {
+    mapTooltip.style.left = event.clientX - tooltipRect.width - offset + "px";
+  }
+
+  if (tooltipRect.bottom > window.innerHeight) {
+    mapTooltip.style.top = event.clientY - tooltipRect.height - offset + "px";
+  }
 }
 
 
@@ -728,7 +820,7 @@ function aktualizujGraf() {
           let jednotka = "";
 
           if (ukazovatel === "percento") {
-            jednotka = " %";
+            jednotka = "%";
           } else if (ukazovatel === "skoda") {
             jednotka = " €";
           }
@@ -750,6 +842,24 @@ function aktualizujGraf() {
   });
 }
 
+kraje.forEach(kraj => {
+  kraj.addEventListener("mouseenter", (event) => {
+    mapTooltip.innerHTML = vytvorObsahTooltipu(kraj);
+    mapTooltip.style.display = "block";
+    posunTooltip(event);
+  });
+
+  kraj.addEventListener("mousemove", (event) => {
+    mapTooltip.style.display = "block";
+    posunTooltip(event);
+  });
+
+  kraj.addEventListener("mouseleave", () => {
+    mapTooltip.style.display = "none";
+  });
+});
+
 grafRokOdSelect.addEventListener("change", aktualizujGraf);
 grafRokDoSelect.addEventListener("change", aktualizujGraf);
 grafUkazovatelSelect.addEventListener("change", aktualizujGraf);
+

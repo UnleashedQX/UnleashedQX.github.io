@@ -220,12 +220,22 @@
     <p><strong>Vplyv alkoholu:</strong> <span id="alkohol">-</span></p>
     <p><strong>Vplyv drog:</strong> <span id="drogy">-</span></p>
     <p><strong>Počet obyvateľov:</strong> <span id="obyvatelia">-</span></p>
-    <p><strong>Index kriminality na 1 000 obyvateľov:</strong> <span id="index-kriminality">-</span></p>
+   <p class="info-row">
+    <strong class="info-tooltip">
+      Index kriminality na 1 000 obyvateľov:
+      <span class="info-tooltip-text">
+        Index kriminality vyjadruje počet zistených trestných činov pripadajúcich na 1 000 obyvateľov.
+        Vypočíta sa ako: (počet zistených trestných činov / počet obyvateľov) × 1 000.
+      </span>
+    </strong>
+    <span id="index-kriminality">-</span>
+</p>
   </div>
 </div>
 
   </div>
 
+  <div id="map-tooltip" class="map-tooltip"></div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>

@@ -317,3 +317,74 @@ path {
   width: 100%;
   max-height: 360px;
 }
+
+.map-tooltip {
+  position: fixed;
+  display: none;
+  pointer-events: none;
+  background: rgba(17, 24, 39, 0.96);
+  color: white;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  z-index: 3000;
+  max-width: 260px;
+}
+
+.tooltip-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.tooltip-label {
+  color: #d1d5db;
+}
+
+.tooltip-value {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* index tooltip*/
+.info-tooltip {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted #009640;
+}
+
+.info-tooltip-text {
+  display: none;
+  position: absolute;
+
+  left: 0;
+  bottom: 130%;
+
+  width: 300px;
+  padding: 10px 12px;
+
+  background: #111827;
+  color: white;
+  border-radius: 8px;
+
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  z-index: 3000;
+}
+
+.info-tooltip:hover .info-tooltip-text {
+  display: block;
+}
