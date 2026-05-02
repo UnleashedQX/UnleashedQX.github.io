@@ -23,6 +23,10 @@
 
 <nav class="crime-bar">
 
+  <button id="reset-vyber" class="reset-btn" title="Zrušiť výber">
+  <span class="reset-minus"></span>
+  </button>
+
     <div class="crime-group">
       <button class="crime-btn" data-druh="NÁSILNÁ KRIMINALITA">Násilná</button>
       <button class="crime-arrow" data-menu="nasilna">▼</button>
@@ -103,12 +107,10 @@
   <div class="container">
 
     <!-- MAPA -->
-    <div class="map-box" id="mapa">
+<div class="map-box" id="mapa">
   <?xml version="1.0"?>
-    
-<!--********* Copyright (c) 2024 Pareto Softare, LLC DBA Simplemaps.com ***************************************
-************* Free for Commercial Use, full terms at  https://simplemaps.com/resources/svg-license ************
-************* Attribution is appreciated! https://simplemaps.com *******************************************-->
+
+  <div class="map-wrapper">
 
 <svg baseprofile="tiny" fill="#6f9c76" height="492" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" version="1.2" viewbox="0 0 1000 492" width="1000" xmlns="http://www.w3.org/2000/svg">
  <g id="features">
@@ -156,35 +158,64 @@
   </circle>
  </g>
 </svg>
-    </div>
 
-    <div class="legenda">
+<div class="legenda">
   <h3>Legenda</h3>
   <div class="legenda-item"><span class="box box1"></span> <span id="legend1">-</span></div>
   <div class="legenda-item"><span class="box box2"></span> <span id="legend2">-</span></div>
   <div class="legenda-item"><span class="box box3"></span> <span id="legend3">-</span></div>
   <div class="legenda-item"><span class="box box4"></span> <span id="legend4">-</span></div>
   <div class="legenda-item"><span class="box box5"></span> <span id="legend5">-</span></div>
+ </div>
 </div>
+
+<div class="graf-box">
+  <div class="graf-header">
+    <h2>Vývoj kriminality v čase</h2>
+
+    <div class="graf-controls">
+      <label for="graf-rok-od">Od:</label>
+      <select id="graf-rok-od"></select>
+
+      <label for="graf-rok-do">Do:</label>
+      <select id="graf-rok-do"></select>
+
+      <label for="graf-ukazovatel">Ukazovateľ:</label>
+      <select id="graf-ukazovatel">
+        <option value="zistene">Zistené trestné činy</option>
+        <option value="objasnene">Objasnené trestné činy</option>
+        <option value="percento">Percento objasnenosti</option>
+        <option value="skoda">Škoda</option>
+        <option value="alkohol">Vplyv alkoholu</option>
+        <option value="drogy">Vplyv drog</option>
+        <option value="index">Index kriminality na 1 000 obyvateľov</option>
+      </select>
+    </div>
+  </div>
+
+  <canvas id="grafVyvoja"></canvas>
+</div>
+
+</div>
+
+    
 
     <!-- INFO PANEL -->
     <div class="info-box">
-  <h2>Údaje o kraji</h2>
   <p>Klikni na kraj v mape.</p>
 
   <p>
-    <label for="rok-select">Rok:</label>
+     <label for="rok-select"><strong>Rok:</strong></label>
     <select id="rok-select"></select>
   </p>
 
 
   <div id="info">
     <p><strong>Vybraná oblasť:</strong> <span id="kraj-nazov">-</span></p>
-    <p><strong>Rok:</strong> <span id="rok">-</span></p>
     <p><strong>Druh kriminality:</strong> <span id="druh">-</span></p>
     <p><strong>Zistené:</strong> <span id="zistene">-</span></p>
     <p><strong>Objasnené:</strong> <span id="objasnene">-</span></p>
-    <p><strong>Percento:</strong> <span id="percento">-</span></p>
+    <p><strong>Objasnenosť:</strong> <span id="percento">-</span></p>
     <p><strong>Škoda:</strong> <span id="skoda">-</span></p>
     <p><strong>Vplyv alkoholu:</strong> <span id="alkohol">-</span></p>
     <p><strong>Vplyv drog:</strong> <span id="drogy">-</span></p>
@@ -195,6 +226,7 @@
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

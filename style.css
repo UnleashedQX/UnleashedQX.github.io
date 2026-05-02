@@ -1,0 +1,319 @@
+body {
+  font-family: "Public Sans", Arial, sans-serif;
+  margin: 20px;
+  background: #ffffff;
+}
+
+/* HORNÝ BANNER */
+.top-bar {
+  background: #009a44;
+  color: white;
+  padding: 14px 40px;
+  margin: -20px -20px 0 -20px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.logo {
+  height: 70px;
+  width: auto;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+/* LIŠTA S DRUHMI KRIMINALITY */
+.crime-bar {
+  background: rgba(19, 184, 91, 0.7);
+  border-bottom: 1px solid #d1d5db;
+  margin: 0 -20px 25px -20px;
+  padding: 10px 40px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* SKUPINA HLAVNÉ TLAČIDLO + ŠÍPKA */
+.crime-group {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* HLAVNÉ TLAČIDLO */
+.crime-btn {
+  background: white;
+  border: 1px solid #cbd5d1;
+  border-radius: 6px 0 0 6px;
+  padding: 8px 14px;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ŠÍPKA */
+.crime-arrow {
+  background: white;
+  border: 1px solid #cbd5d1;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.crime-btn:hover,
+.crime-arrow:hover {
+  background: #e8f5ee;
+  border-color: #009640;
+}
+
+.crime-btn.active {
+  background: #009a44;
+  color: white;
+  border-color: #009a44;
+}
+
+
+.crime-dropdown {
+  display: none;
+  position: absolute;
+  top: 43px;
+  left: 0;
+  min-width: 270px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.crime-dropdown.show {
+  display: flex;
+  flex-direction: column;
+}
+
+.crime-dropdown button {
+  background: white;
+  border: none;
+  text-align: left;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+}
+
+.crime-dropdown button:hover {
+  background: #e5f4ea;
+}
+
+.crime-dropdown button.active {
+  background: #009a44;
+  color: white;
+  font-weight: 600;
+}
+
+/* HLAVNÁ ČASŤ STRÁNKY */
+.map-wrapper {
+  position: relative;
+}
+
+.container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.map-box {
+  flex: 2;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info-box {
+  flex: 1;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info-box h2 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.info-box p {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.info-box strong {
+  color: #111827;
+}
+
+.map-box svg {
+  width: 100%;
+  height: 600px;
+  display: block;
+}
+
+
+/* LEGENDA */
+.legenda {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 145px;
+  min-width: 145px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+
+.legenda h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.legenda-item:last-child {
+  margin-bottom: 0;
+}
+
+.legenda-item span:last-child {
+  display: inline-block;
+  min-width: 90px;
+}
+
+.box {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.box1 { background-color: #FD8D3C; }
+.box2 { background-color: #FC4E2A; }
+.box3 { background-color: #E31A1C; }
+.box4 { background-color: #BD0026; }
+.box5 { background-color: #800026; }
+
+/* MAPA */
+path {
+  stroke: #333;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.reset-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #ef3b33;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset-btn:hover {
+  background: #d92f28;
+}
+
+.reset-minus {
+  width: 18px;
+  height: 5px;
+  background: white;
+  border-radius: 3px;
+  display: block;
+}
+
+.graf-box {
+  height: 430px;
+  margin-top: 30px;
+  padding: 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.graf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.graf-header h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 600;
+  color: #111827;
+  font-family: "Public Sans", Arial, sans-serif;
+}
+
+.graf-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+  color: #374151;
+}
+
+.graf-controls select {
+  padding: 7px 9px;
+  border: 1px solid #cbd5d1;
+  border-radius: 7px;
+  background: white;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#grafVyvoja {
+  width: 100%;
+  max-height: 360px;
+}
