@@ -615,59 +615,32 @@ path {
   }
 }
 
-@media (max-width: 520px) {
-  .header-content {
-    flex-direction: column;
+/* RESPONZÍVNE ZOBRAZENIE */
+@media (max-width: 1100px) {
+  .container {
+    display: flex;
+    flex-direction: row;
     align-items: flex-start;
+    gap: 20px;
   }
 
-  .top-bar h1 {
-    font-size: 20px;
+  .map-box {
+    flex: 2;
+    min-width: 0;
   }
 
-  .crime-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .crime-group {
-    width: 100%;
-  }
-
-  .crime-btn {
+  .info-box {
     flex: 1;
-    text-align: left;
+    min-width: 280px;
   }
 
-  .crime-arrow {
-    width: 42px;
-  }
-
-  .reset-btn {
-    align-self: flex-start;
-  }
-
-  .map-box svg {
-    height: 330px;
-  }
-
-  .map-color-control {
-    position: static;
-    margin-bottom: 10px;
-  }
-
-  .legenda {
-    position: static;
-    margin-top: 10px;
+  .graf-box {
+    margin-top: 24px;
     width: 100%;
     box-sizing: border-box;
   }
 
-  .graf-box {
-    height: 400px;
-  }
-
-  #grafVyvoja {
-    height: 280px;
+  .map-box svg {
+    height: 500px;
   }
 }
