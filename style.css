@@ -659,12 +659,12 @@ path {
   }
 
   .chart-area {
-    height: 340px;
+    height: 450px;
   }
 }
 
 @media (max-width: 520px) {
   .chart-area {
-    height: 330px;
+    height: 450px;
   }
 }
