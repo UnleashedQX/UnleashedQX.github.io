@@ -959,12 +959,15 @@ function aktualizujGraf() {
           }
         }
       },
-      scales: {
+
+scales: {
   x: {
     ticks: {
+      display: true,
       autoSkip: false,
       maxRotation: 45,
-      minRotation: 45
+      minRotation: 45,
+      padding: 10
     }
   },
   y: {
@@ -974,7 +977,7 @@ function aktualizujGraf() {
     }
   }
 }
-    }
+}
   });
 }
 
