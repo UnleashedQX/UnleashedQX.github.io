@@ -175,35 +175,6 @@
  </div>
 </div>
 
-<div class="graf-box">
-  <div class="graf-header">
-    <h2 id="graf-nazov">Vývoj kriminality v čase</h2>
-
-    <div class="graf-controls">
-      <label for="graf-rok-od">Od:</label>
-      <select id="graf-rok-od"></select>
-
-      <label for="graf-rok-do">Do:</label>
-      <select id="graf-rok-do"></select>
-
-      <label for="graf-ukazovatel">Ukazovateľ:</label>
-      <select id="graf-ukazovatel">
-        <option value="zistene">Zistené trestné činy</option>
-        <option value="objasnene">Objasnené trestné činy</option>
-        <option value="percento">Objasnenosť</option>
-        <option value="skoda">Škoda</option>
-        <option value="alkohol">Vplyv alkoholu</option>
-        <option value="drogy">Vplyv drog</option>
-        <option value="index">Index kriminality na 1 000 obyvateľov</option>
-      </select>
-
-      <button id="stiahnut-graf" class="download-chart-btn">Stiahnuť graf</button>
-
-    </div>
-  </div>
-
-  <canvas id="grafVyvoja"></canvas>
-</div>
 
 </div>
 
@@ -252,6 +223,37 @@
 </div>
 
   </div>
+
+<div class="graf-box">
+  <div class="graf-header">
+    <h2 id="graf-nazov">Vývoj kriminality v čase</h2>
+
+    <div class="graf-controls">
+      <label for="graf-rok-od">Od:</label>
+      <select id="graf-rok-od"></select>
+
+      <label for="graf-rok-do">Do:</label>
+      <select id="graf-rok-do"></select>
+
+      <label for="graf-ukazovatel">Ukazovateľ:</label>
+      <select id="graf-ukazovatel">
+        <option value="zistene">Zistené trestné činy</option>
+        <option value="objasnene">Objasnené trestné činy</option>
+        <option value="percento">Objasnenosť</option>
+        <option value="skoda">Škoda</option>
+        <option value="alkohol">Vplyv alkoholu</option>
+        <option value="drogy">Vplyv drog</option>
+        <option value="index">Index kriminality na 1 000 obyvateľov</option>
+      </select>
+
+      <button id="stiahnut-graf" class="download-chart-btn">Stiahnuť graf</button>
+
+    </div>
+  </div>
+
+  <canvas id="grafVyvoja"></canvas>
+</div>
+ 
 
   <div id="map-tooltip" class="map-tooltip"></div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -297,12 +297,13 @@ path {
 }
 
 .graf-box {
-  height: 430px;
-  margin-top: 30px;
-  padding: 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  height: 430px;
 }
 
 .graf-header {
@@ -476,4 +477,197 @@ path {
 .map-color-toggle:hover {
   border-color: #009640;
   background: #e8f5ee;
+}
+
+
+/* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE */
+
+
+/* RESPONZÍVNE ZOBRAZENIE */
+@media (max-width: 1100px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .map-box,
+  .info-box {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .map-box svg {
+    height: 520px;
+  }
+
+  .info-box {
+    order: 2;
+  }
+
+  .graf-box {
+    height: 420px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    margin: 12px;
+  }
+
+  .top-bar {
+    margin: -12px -12px 0 -12px;
+    padding: 12px 18px;
+  }
+
+  .header-content {
+    gap: 14px;
+  }
+
+  .logo {
+    height: 52px;
+  }
+
+  .top-bar h1 {
+    font-size: 22px;
+  }
+
+  .crime-bar {
+    margin: 0 -12px 20px -12px;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .crime-btn,
+  .crime-arrow {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .reset-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .map-box {
+    padding: 12px;
+  }
+
+  .map-box svg {
+    height: 420px;
+  }
+
+  .map-color-control {
+    top: 10px;
+    left: 10px;
+  }
+
+  .map-color-toggle {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .legenda {
+    right: 10px;
+    bottom: 10px;
+    width: 125px;
+    min-width: 125px;
+    padding: 8px 9px;
+  }
+
+  .legenda h3 {
+    font-size: 13px;
+  }
+
+  .legenda-item {
+    font-size: 11px;
+  }
+
+  .box {
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+  }
+
+  .info-box {
+    padding: 14px;
+  }
+
+  .graf-box {
+    height: 420px;
+    padding: 14px;
+  }
+
+  .graf-header {
+    align-items: flex-start;
+  }
+
+  .graf-controls {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .graf-controls select,
+  .download-chart-btn {
+    width: 100%;
+  }
+
+  #grafVyvoja {
+    height: 300px;
+  }
+}
+
+@media (max-width: 520px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top-bar h1 {
+    font-size: 20px;
+  }
+
+  .crime-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .crime-group {
+    width: 100%;
+  }
+
+  .crime-btn {
+    flex: 1;
+    text-align: left;
+  }
+
+  .crime-arrow {
+    width: 42px;
+  }
+
+  .reset-btn {
+    align-self: flex-start;
+  }
+
+  .map-box svg {
+    height: 330px;
+  }
+
+  .map-color-control {
+    position: static;
+    margin-bottom: 10px;
+  }
+
+  .legenda {
+    position: static;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .graf-box {
+    height: 400px;
+  }
+
+  #grafVyvoja {
+    height: 280px;
+  }
 }
