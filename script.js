@@ -26,12 +26,18 @@ const crimeDropdownButtons = document.querySelectorAll(".crime-dropdown button")
 
 const resetVyberBtn = document.getElementById("reset-vyber");
 
+const mapColorToggle = document.getElementById("map-color-toggle");
+let rezimFarbeniaMapy = "zistene";
+
+const grafNazov = document.getElementById("graf-nazov");
 const grafRokOdSelect = document.getElementById("graf-rok-od");
 const grafRokDoSelect = document.getElementById("graf-rok-do");
 const grafUkazovatelSelect = document.getElementById("graf-ukazovatel");
 const grafCanvas = document.getElementById("grafVyvoja");
+const stiahnutGrafBtn = document.getElementById("stiahnut-graf");
 
 const mapTooltip = document.getElementById("map-tooltip");
+
 
 
 const mappingKrajov = {
@@ -174,9 +180,21 @@ function nastavPrazdnuLegendu() {
   legend5.textContent = "-";
 }
 
+function formatHodnotuLegendy(hodnota, rezim) {
+  if (rezim === "index") {
+    return hodnota.toLocaleString("sk-SK", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  return Math.round(hodnota).toLocaleString("sk-SK");
+}
+
 function zafarbiKraje() {
   const vybranyRok = Number(rokSelect.value);
   const vybraneDruhy = getVybraneDruhy();
+  const rezimFarbenia = rezimFarbeniaMapy;
 
   const hodnotyKrajov = [];
 
@@ -191,14 +209,31 @@ function zafarbiKraje() {
 
     const sucet = spocitajZaznamy(zaznamy);
 
-    if (zaznamy.length > 0) {
-      hodnotyKrajov.push({
-        krajElement: kraj,
-        hodnota: sucet.zistene
-      });
-    } else {
+    if (zaznamy.length === 0) {
       kraj.style.fill = "#ccc";
+      return;
     }
+
+    let hodnota = sucet.zistene;
+
+    if (rezimFarbenia === "index") {
+      const zaznamPop = populaciaData.find(item =>
+        item.kraj === nazov &&
+        item.rok === vybranyRok
+      );
+
+      if (!zaznamPop || !zaznamPop.obyvatelia) {
+        kraj.style.fill = "#ccc";
+        return;
+      }
+
+      hodnota = (sucet.zistene / zaznamPop.obyvatelia) * 1000;
+    }
+
+    hodnotyKrajov.push({
+      krajElement: kraj,
+      hodnota: hodnota
+    });
   });
 
   if (hodnotyKrajov.length === 0) {
@@ -211,7 +246,7 @@ function zafarbiKraje() {
   const max = Math.max(...hodnoty);
 
   if (min === max) {
-    legend1.textContent = `${min}`;
+    legend1.textContent = formatHodnotuLegendy(min, rezimFarbenia);
     legend2.textContent = "-";
     legend3.textContent = "-";
     legend4.textContent = "-";
@@ -232,11 +267,11 @@ function zafarbiKraje() {
   const hranica3 = min + step * 3;
   const hranica4 = min + step * 4;
 
-  legend1.textContent = `${Math.round(min)} – ${Math.round(hranica1)}`;
-  legend2.textContent = `${Math.round(hranica1)} – ${Math.round(hranica2)}`;
-  legend3.textContent = `${Math.round(hranica2)} – ${Math.round(hranica3)}`;
-  legend4.textContent = `${Math.round(hranica3)} – ${Math.round(hranica4)}`;
-  legend5.textContent = `${Math.round(hranica4)} – ${Math.round(max)}`;
+  legend1.textContent = `${formatHodnotuLegendy(min, rezimFarbenia)} – ${formatHodnotuLegendy(hranica1, rezimFarbenia)}`;
+  legend2.textContent = `${formatHodnotuLegendy(hranica1, rezimFarbenia)} – ${formatHodnotuLegendy(hranica2, rezimFarbenia)}`;
+  legend3.textContent = `${formatHodnotuLegendy(hranica2, rezimFarbenia)} – ${formatHodnotuLegendy(hranica3, rezimFarbenia)}`;
+  legend4.textContent = `${formatHodnotuLegendy(hranica3, rezimFarbenia)} – ${formatHodnotuLegendy(hranica4, rezimFarbenia)}`;
+  legend5.textContent = `${formatHodnotuLegendy(hranica4, rezimFarbenia)} – ${formatHodnotuLegendy(max, rezimFarbenia)}`;
 
   hodnotyKrajov.forEach(item => {
     const value = item.hodnota;
@@ -249,6 +284,18 @@ function zafarbiKraje() {
     else item.krajElement.style.fill = "#FD8D3C";
   });
 }
+
+//prepocet na eura
+function skodaVEurach(item) {
+  const skoda = item.skoda || 0;
+
+  if (item.rok >= 1997 && item.rok <= 2008) {
+    return (skoda * 1000) / 30.1260;
+  }
+
+  return skoda * 1000;
+}
+
 
 function zobrazSlovensko() {
   const vybranyRok = Number(rokSelect.value);
@@ -279,7 +326,7 @@ function zobrazSlovensko() {
   percentoSpan.textContent = percento.toLocaleString("sk-SK", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2 }) + "%";
-  skodaSpan.textContent = sucet.skoda.toLocaleString("sk-SK") + "€";
+  skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + "€";
   alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
   drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
   obyvateliaSpan.textContent = populaciaSpolu > 0 ? populaciaSpolu.toLocaleString("sk-SK") : "-";
@@ -322,7 +369,7 @@ function zobrazKraj(krajElement) {
     percentoSpan.textContent = percento.toLocaleString("sk-SK", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2}) + "%";
-    skodaSpan.textContent = sucet.skoda.toLocaleString("sk-SK") + "€";
+    skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + "€";
     alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
     drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
 
@@ -513,7 +560,7 @@ function spocitajZaznamy(zaznamy) {
   return zaznamy.reduce((acc, item) => {
     acc.zistene += item.zistene || 0;
     acc.objasnene += item.objasnene || 0;
-    acc.skoda += item.skoda || 0;
+    acc.skoda += skodaVEurach(item);
     acc.alkohol += item.vplyv_alkoholu || 0;
     acc.drogy += item.vplyv_drog || 0;
     return acc;
@@ -725,6 +772,53 @@ function vypocitajHodnotuGrafu(sucet, populacia, ukazovatel) {
   return 0;
 }
 
+function nazovUkazovatelaPreGraf(ukazovatel) {
+  if (ukazovatel === "zistene") return "zistenej kriminality";
+  if (ukazovatel === "objasnene") return "objasnenej kriminality";
+  if (ukazovatel === "percento") return "percenta objasnenosti";
+  if (ukazovatel === "skoda") return "škody spôsobenej kriminalitou";
+  if (ukazovatel === "alkohol") return "kriminality pod vplyvom alkoholu";
+  if (ukazovatel === "drogy") return "kriminality pod vplyvom drog";
+  if (ukazovatel === "index") return "indexu kriminality";
+
+  return "kriminality";
+}
+
+function nazovOblastiPreNadpis(nazovOblasti) {
+  const tvary = {
+    "Slovenská republika": "Slovenskej republike",
+    "Bratislavský kraj": "Bratislavskom kraji",
+    "Trnavský kraj": "Trnavskom kraji",
+    "Trenčiansky kraj": "Trenčianskom kraji",
+    "Nitriansky kraj": "Nitrianskom kraji",
+    "Žilinský kraj": "Žilinskom kraji",
+    "Banskobystrický kraj": "Banskobystrickom kraji",
+    "Prešovský kraj": "Prešovskom kraji",
+    "Košický kraj": "Košickom kraji"
+  };
+
+  return tvary[nazovOblasti] || nazovOblasti;
+}
+
+function vypocitajTrendovuSpojnicu(roky, hodnoty) {
+  if (roky.length < 2 || hodnoty.length < 2) {
+    return hodnoty;
+  }
+
+  const n = roky.length;
+
+  const sumaX = roky.reduce((sum, x) => sum + x, 0);
+  const sumaY = hodnoty.reduce((sum, y) => sum + y, 0);
+
+  const sumaXY = roky.reduce((sum, x, i) => sum + x * hodnoty[i], 0);
+  const sumaXX = roky.reduce((sum, x) => sum + x * x, 0);
+
+  const sklon = (n * sumaXY - sumaX * sumaY) / (n * sumaXX - sumaX * sumaX);
+  const posun = (sumaY - sklon * sumaX) / n;
+
+  return roky.map(rok => sklon * rok + posun);
+}
+
 function aktualizujGraf() {
   if (!grafCanvas || data.length === 0 || populaciaData.length === 0) {
     return;
@@ -745,6 +839,17 @@ function aktualizujGraf() {
   const jeVybranyKraj = aktivnyKraj !== null;
   const nazovKraja = jeVybranyKraj ? mappingKrajov[aktivnyKraj.id] : null;
   const nazovOblasti = jeVybranyKraj ? nazovKraja : "Slovenská republika";
+
+  const obdobieGrafu = rokOd === rokDo
+    ? `v roku ${rokOd}`
+    : `v rokoch ${rokOd} – ${rokDo}`;
+
+  const nazovUkazovatelaNadpis = nazovUkazovatelaPreGraf(ukazovatel);
+  const nazovOblastiNadpis = nazovOblastiPreNadpis(nazovOblasti);
+
+  if (grafNazov) {
+    grafNazov.textContent = `Vývoj ${nazovUkazovatelaNadpis} v ${nazovOblastiNadpis} ${obdobieGrafu}`;
+  }
 
   const roky = [];
   const hodnoty = [];
@@ -778,11 +883,17 @@ function aktualizujGraf() {
     const hodnota = vypocitajHodnotuGrafu(sucet, populacia, ukazovatel);
 
     roky.push(rok);
-    hodnoty.push(Number(hodnota.toFixed(2)));
+
+    if (ukazovatel === "skoda") {
+      hodnoty.push(Math.round(hodnota));
+    } else {
+      hodnoty.push(Number(hodnota.toFixed(2)));
+    }
   }
 
-  const nazovUkazovatela = grafUkazovatelSelect.options[grafUkazovatelSelect.selectedIndex].text;
+  const nazovUkazovatelaLegenda = grafUkazovatelSelect.options[grafUkazovatelSelect.selectedIndex].text;
   const nazovVyberu = zobrazTextVyberu(vybraneDruhy);
+  const trendoveHodnoty = vypocitajTrendovuSpojnicu(roky, hodnoty);
 
   if (grafVyvoja) {
     grafVyvoja.destroy();
@@ -792,55 +903,107 @@ function aktualizujGraf() {
     type: "line",
     data: {
       labels: roky,
-      datasets: [{
-        label: `${nazovUkazovatela} – ${nazovOblasti} – ${nazovVyberu}`,
+      datasets: [
+       {
+        label: `${nazovUkazovatelaLegenda} – ${nazovOblasti} – ${nazovVyberu}`,
         data: hodnoty,
         tension: 0.25,
         borderWidth: 3,
         pointRadius: 4,
         pointHoverRadius: 6
-}]
+      },
+      {
+        label: "Trendová spojnica",
+        data: trendoveHodnoty,
+        tension: 0,
+        borderWidth: 2,
+        borderDash: [6, 6],
+        pointRadius: 0,
+        pointHoverRadius: 0
+          }
+        ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-      display: true
-    },
-    tooltip: {
-      callbacks: {
-        title: function () {
-          return "";
+          display: true
         },
-        label: function (context) {
-          const hodnota = context.raw;
-          const ukazovatel = grafUkazovatelSelect.value;
+        tooltip: {
+          callbacks: {
+            title: function () {
+              return "";
+            },
+            label: function (context) {
+              const hodnota = context.raw;
+              const ukazovatel = grafUkazovatelSelect.value;
 
-          let jednotka = "";
+              let jednotka = "";
 
-          if (ukazovatel === "percento") {
-            jednotka = "%";
-          } else if (ukazovatel === "skoda") {
-            jednotka = " €";
+              if (ukazovatel === "percento") {
+                jednotka = " %";
+              } else if (ukazovatel === "skoda") {
+                jednotka = " €";
+              }
+
+              if (ukazovatel === "skoda") {
+                return Math.round(hodnota).toLocaleString("sk-SK") + jednotka;
+              }
+
+              return hodnota.toLocaleString("sk-SK", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+              }) + jednotka;
+            }
           }
-
-          return hodnota.toLocaleString("sk-SK", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-          }) + jednotka;
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
         }
       }
     }
-  },
-  scales: {
-    y: {
-      beginAtZero: true
-    }
-  }
-}
   });
 }
+
+
+stiahnutGrafBtn.addEventListener("click", () => {
+  if (!grafCanvas) {
+    return;
+  }
+
+  const nazovGrafu = grafNazov ? grafNazov.textContent : "Vývoj kriminality";
+  const paddingTop = 60;
+  const paddingBottom = 20;
+
+  const tempCanvas = document.createElement("canvas");
+  const tempContext = tempCanvas.getContext("2d");
+
+  tempCanvas.width = grafCanvas.width;
+  tempCanvas.height = grafCanvas.height + paddingTop + paddingBottom;
+
+  // biele pozadie
+  tempContext.fillStyle = "white";
+  tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+  // nadpis
+  tempContext.fillStyle = "#111827";
+  tempContext.font = "600 24px Public Sans, Arial, sans-serif";
+  tempContext.textAlign = "center";
+  tempContext.textBaseline = "middle";
+  tempContext.fillText(nazovGrafu, tempCanvas.width / 2, 30);
+
+  // graf pod nadpis
+  tempContext.drawImage(grafCanvas, 0, paddingTop);
+
+  const link = document.createElement("a");
+  link.download = "graf-vyvoja-kriminality.png";
+  link.href = tempCanvas.toDataURL("image/png");
+  link.click();
+});
+
 
 kraje.forEach(kraj => {
   kraj.addEventListener("mouseenter", (event) => {
@@ -859,7 +1022,25 @@ kraje.forEach(kraj => {
   });
 });
 
+if (mapColorToggle) {
+  mapColorToggle.addEventListener("click", () => {
+    if (rezimFarbeniaMapy === "zistene") {
+      rezimFarbeniaMapy = "index";
+      mapColorToggle.dataset.mode = "index";
+      mapColorToggle.textContent = "Farbenie mapy: Index kriminality";
+    } else {
+      rezimFarbeniaMapy = "zistene";
+      mapColorToggle.dataset.mode = "zistene";
+      mapColorToggle.textContent = "Farbenie mapy: Zistené trestné činy";
+    }
+
+    zafarbiKraje();
+  });
+}
+
+
 grafRokOdSelect.addEventListener("change", aktualizujGraf);
 grafRokDoSelect.addEventListener("change", aktualizujGraf);
 grafUkazovatelSelect.addEventListener("change", aktualizujGraf);
+
 

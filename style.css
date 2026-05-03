@@ -175,6 +175,35 @@ body {
   color: #111827;
 }
 
+#rok-select {
+  padding: 7px 10px;
+  border: 1px solid #cbd5d1;
+  border-radius: 8px;
+  background: white;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#rok-select:hover {
+  border-color: #009640;
+  background: #f8faf9;
+}
+
+#rok-select:focus {
+  outline: none;
+  border-color: #009640;
+  box-shadow: 0 0 0 3px rgba(0, 150, 64, 0.15);
+}
+
+.info-box label[for="rok-select"] {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
 .map-box svg {
   width: 100%;
   height: 600px;
@@ -304,13 +333,27 @@ path {
 }
 
 .graf-controls select {
-  padding: 7px 9px;
+  padding: 8px 32px 8px 12px;
   border: 1px solid #cbd5d1;
-  border-radius: 7px;
-  background: white;
+  border-radius: 8px;
+  background-color: white;
   font-family: "Public Sans", Arial, sans-serif;
   font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.graf-controls select:hover {
+  border-color: #009640;
+  background-color: #f8faf9;
+}
+
+.graf-controls select:focus {
+  outline: none;
+  border-color: #009640;
+  box-shadow: 0 0 0 3px rgba(0, 150, 64, 0.15);
 }
 
 #grafVyvoja {
@@ -387,4 +430,50 @@ path {
 
 .info-tooltip:hover .info-tooltip-text {
   display: block;
+}
+
+.download-chart-btn {
+  padding: 8px 12px;
+  border: 1px solid #009640;
+  border-radius: 8px;
+  background: #009640;
+  color: white;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.download-chart-btn:hover {
+  background: #007f36;
+  border-color: #007f36;
+}
+
+.map-color-control {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 30;
+}
+
+.map-color-toggle {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 10px 14px;
+
+  font-family: "Public Sans", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  transition: 0.2s ease;
+}
+
+.map-color-toggle:hover {
+  border-color: #009640;
+  background: #e8f5ee;
 }
