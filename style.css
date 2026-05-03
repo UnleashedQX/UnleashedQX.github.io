@@ -491,10 +491,6 @@ path {
 /* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE */
 
 
-/* ============================= */
-/* RESPONZÍVNE ZOBRAZENIE        */
-/* ============================= */
-
 /* Základné rozloženie: mapa + info box vedľa seba */
 .container {
   display: flex;
@@ -538,10 +534,7 @@ path {
   max-height: none !important;
 }
 
-/* ============================= */
-/* TABLETY / MENŠIE NOTEBOOKY    */
-/* ============================= */
-
+/* Tablety */
 @media (max-width: 1100px) {
   .container {
     flex-direction: row;
@@ -571,9 +564,8 @@ path {
   }
 }
 
-/* ============================= */
-/* POD 700 PX: MAPA A INFO POD SEBA */
-/* ============================= */
+
+/* Pod 700px */
 
 @media (max-width: 700px) {
   body {
@@ -693,9 +685,8 @@ path {
   }
 }
 
-/* ============================= */
-/* MOBILY                        */
-/* ============================= */
+
+/* Telefón*/
 
 @media (max-width: 520px) {
   .header-content {
