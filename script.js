@@ -960,10 +960,20 @@ function aktualizujGraf() {
         }
       },
       scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
+  x: {
+    ticks: {
+      autoSkip: false,
+      maxRotation: 45,
+      minRotation: 45
+    }
+  },
+  y: {
+    beginAtZero: true,
+    ticks: {
+      maxTicksLimit: 6
+    }
+  }
+}
     }
   });
 }

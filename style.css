@@ -303,7 +303,14 @@ path {
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  height: 430px;
+  height: auto;
+  overflow: hidden;
+}
+
+.chart-area {
+  position: relative;
+  width: 100%;
+  height: 450px;
 }
 
 .graf-header {
@@ -358,8 +365,9 @@ path {
 }
 
 #grafVyvoja {
-  width: 100%;
-  max-height: 360px;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 .map-tooltip {
@@ -642,5 +650,21 @@ path {
 
   .map-box svg {
     height: 500px;
+  }
+}
+
+@media (max-width: 700px) {
+  .graf-box {
+    padding: 14px;
+  }
+
+  .chart-area {
+    height: 340px;
+  }
+}
+
+@media (max-width: 520px) {
+  .chart-area {
+    height: 330px;
   }
 }
