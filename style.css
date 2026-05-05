@@ -1,10 +1,11 @@
+/* Základ stránky */
 body {
   font-family: "Public Sans", Arial, sans-serif;
   margin: 20px;
   background: #ffffff;
 }
 
-/* HORNÝ BANNER */
+/* Horný banner */
 .top-bar {
   background: #009a44;
   color: white;
@@ -30,7 +31,7 @@ body {
   font-weight: 600;
 }
 
-/* LIŠTA S DRUHMI KRIMINALITY */
+/* Lišta s druhmi kriminality */
 .crime-bar {
   background: rgba(19, 184, 91, 0.7);
   border-bottom: 1px solid #d1d5db;
@@ -44,7 +45,7 @@ body {
   align-items: center;
 }
 
-/* SKUPINA HLAVNÉ TLAČIDLO + ŠÍPKA */
+/* Skupina hlavného tlačidla a šípky */
 .crime-group {
   position: relative;
   display: inline-flex;
@@ -52,7 +53,7 @@ body {
   align-items: stretch;
 }
 
-/* HLAVNÉ TLAČIDLO */
+/* Hlavné tlačidlo */
 .crime-btn {
   background: white;
   border: 1px solid #cbd5d1;
@@ -64,7 +65,7 @@ body {
   cursor: pointer;
 }
 
-/* ŠÍPKA */
+/* Šípka */
 .crime-arrow {
   background: white;
   border: 1px solid #cbd5d1;
@@ -88,7 +89,6 @@ body {
   color: white;
   border-color: #009a44;
 }
-
 
 .crime-dropdown {
   display: none;
@@ -129,7 +129,7 @@ body {
   font-weight: 600;
 }
 
-/* HLAVNÁ ČASŤ STRÁNKY */
+/* Hlavná časť stránky */
 .map-wrapper {
   position: relative;
 }
@@ -210,8 +210,7 @@ body {
   display: block;
 }
 
-
-/* LEGENDA */
+/* Legenda */
 .legenda {
   position: absolute;
   right: 14px;
@@ -257,13 +256,27 @@ body {
   flex-shrink: 0;
 }
 
-.box1 { background-color: #FD8D3C; }
-.box2 { background-color: #FC4E2A; }
-.box3 { background-color: #E31A1C; }
-.box4 { background-color: #BD0026; }
-.box5 { background-color: #800026; }
+.box1 {
+  background-color: #FD8D3C;
+}
 
-/* MAPA */
+.box2 {
+  background-color: #FC4E2A;
+}
+
+.box3 {
+  background-color: #E31A1C;
+}
+
+.box4 {
+  background-color: #BD0026;
+}
+
+.box5 {
+  background-color: #800026;
+}
+
+/* Mapa */
 path {
   stroke: #333;
   stroke-width: 1;
@@ -408,7 +421,7 @@ path {
   color: #ffffff;
 }
 
-/* index tooltip*/
+/* Info tooltip */
 .info-tooltip {
   position: relative;
   cursor: help;
@@ -418,21 +431,16 @@ path {
 .info-tooltip-text {
   display: none;
   position: absolute;
-
   left: 0;
   bottom: 130%;
-
   width: 300px;
   padding: 10px 12px;
-
   background: #111827;
   color: white;
   border-radius: 8px;
-
   font-size: 13px;
   font-weight: 400;
   line-height: 1.45;
-
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   z-index: 3000;
 }
@@ -471,12 +479,10 @@ path {
   border: 1px solid #d1d5db;
   border-radius: 10px;
   padding: 10px 14px;
-
   font-family: "Public Sans", Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #1f2937;
-
   cursor: pointer;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
   transition: 0.2s ease;
@@ -487,9 +493,7 @@ path {
   background: #e8f5ee;
 }
 
-
-/* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE *//* RESPONZÍVNE ZOBRAZENIE */
-
+/* Responzívne zobrazenie */
 
 /* Základné rozloženie: mapa + info box vedľa seba */
 .container {
@@ -564,9 +568,7 @@ path {
   }
 }
 
-
 /* Pod 700px */
-
 @media (max-width: 700px) {
   body {
     margin: 12px;
@@ -685,9 +687,8 @@ path {
   }
 }
 
-
 /* Telefón*/
-
+/* Telefón */
 @media (max-width: 520px) {
   .header-content {
     flex-direction: column;

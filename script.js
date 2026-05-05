@@ -1,3 +1,5 @@
+// DOM prvky
+
 const kraje = document.querySelectorAll("path");
 
 const krajNazovSpan = document.getElementById("kraj-nazov");
@@ -25,9 +27,9 @@ const crimeArrows = document.querySelectorAll(".crime-arrow");
 const crimeDropdownButtons = document.querySelectorAll(".crime-dropdown button");
 
 const resetVyberBtn = document.getElementById("reset-vyber");
-
 const mapColorToggle = document.getElementById("map-color-toggle");
-let rezimFarbeniaMapy = "zistene";
+
+// Nastavenia a mapovania
 
 const grafNazov = document.getElementById("graf-nazov");
 const grafRokOdSelect = document.getElementById("graf-rok-od");
@@ -37,8 +39,6 @@ const grafCanvas = document.getElementById("grafVyvoja");
 const stiahnutGrafBtn = document.getElementById("stiahnut-graf");
 
 const mapTooltip = document.getElementById("map-tooltip");
-
-
 
 const mappingKrajov = {
   SKBL: "Bratislavský kraj",
@@ -51,7 +51,7 @@ const mappingKrajov = {
   SKKI: "Košický kraj"
 };
 
-//mapovanie nazvov
+// Mapovanie názvov
 const nazvyKriminality = {
   "CELKOVÁ KRIMINALITA": "Celková kriminalita",
   "NÁSILNÁ KRIMINALITA": "Násilná kriminalita",
@@ -142,6 +142,17 @@ const podkategoriePodlaHlavnej = {
   ]
 };
 
+// Stav aplikácie
+
+let data = [];
+let populaciaData = [];
+let aktivnyKraj = null;
+let aktivneDruhy = [];
+let rezimFarbeniaMapy = "zistene";
+let grafVyvoja = null;
+
+// Pomocné funkcie pre výber kriminality
+
 function najdiHlavnuKategoriuPrePodkategoriu(podkategoria) {
   for (const hlavna in podkategoriePodlaHlavnej) {
     if (podkategoriePodlaHlavnej[hlavna].includes(podkategoria)) {
@@ -156,7 +167,7 @@ function zobrazNazovKriminality(nazov) {
   return nazvyKriminality[nazov] || nazov;
 }
 
-//nie je vybrany ziadny druh vybera sa celkova
+// Ak nie je vybraný žiadny druh, používa sa celková kriminalita.
 function getVybraneDruhy() {
   if (aktivneDruhy.length === 0) {
     return ["CELKOVÁ KRIMINALITA"];
@@ -165,12 +176,7 @@ function getVybraneDruhy() {
   return aktivneDruhy;
 }
 
-
-let data = [];
-let populaciaData = [];
-let aktivnyKraj = null;
-let aktivneDruhy = [];
-let grafVyvoja = null; 
+// Pomocné funkcie pre formátovanie a výpočty
 
 function nastavPrazdnuLegendu() {
   legend1.textContent = "-";
@@ -190,6 +196,46 @@ function formatHodnotuLegendy(hodnota, rezim) {
 
   return Math.round(hodnota).toLocaleString("sk-SK");
 }
+
+function skodaVEurach(item) {
+  const skoda = item.skoda || 0;
+
+  if (item.rok >= 1997 && item.rok <= 2008) {
+    return (skoda * 1000) / 30.1260;
+  }
+
+  return skoda * 1000;
+}
+
+function spocitajZaznamy(zaznamy) {
+  return zaznamy.reduce((acc, item) => {
+    acc.zistene += item.zistene || 0;
+    acc.objasnene += item.objasnene || 0;
+    acc.skoda += skodaVEurach(item);
+    acc.alkohol += item.vplyv_alkoholu || 0;
+    acc.drogy += item.vplyv_drog || 0;
+    return acc;
+  }, {
+    zistene: 0,
+    objasnene: 0,
+    skoda: 0,
+    alkohol: 0,
+    drogy: 0
+  });
+}
+
+function formatCeleCislo(hodnota) {
+  return hodnota.toLocaleString("sk-SK");
+}
+
+function formatDesatinneCislo(hodnota) {
+  return hodnota.toLocaleString("sk-SK", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+// Farbenie mapy
 
 function zafarbiKraje() {
   const vybranyRok = Number(rokSelect.value);
@@ -285,17 +331,7 @@ function zafarbiKraje() {
   });
 }
 
-//prepocet na eura
-function skodaVEurach(item) {
-  const skoda = item.skoda || 0;
-
-  if (item.rok >= 1997 && item.rok <= 2008) {
-    return (skoda * 1000) / 30.1260;
-  }
-
-  return skoda * 1000;
-}
-
+// Zobrazenie detailov
 
 function zobrazSlovensko() {
   const vybranyRok = Number(rokSelect.value);
@@ -324,8 +360,9 @@ function zobrazSlovensko() {
   zisteneSpan.textContent = sucet.zistene.toLocaleString("sk-SK");
   objasneneSpan.textContent = sucet.objasnene.toLocaleString("sk-SK");
   percentoSpan.textContent = percento.toLocaleString("sk-SK", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2 }) + "%";
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + "%";
   skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + "€";
   alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
   drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
@@ -367,8 +404,9 @@ function zobrazKraj(krajElement) {
     zisteneSpan.textContent = sucet.zistene.toLocaleString("sk-SK");
     objasneneSpan.textContent = sucet.objasnene.toLocaleString("sk-SK");
     percentoSpan.textContent = percento.toLocaleString("sk-SK", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2}) + "%";
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + "%";
     skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + "€";
     alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
     drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
@@ -400,189 +438,7 @@ function zobrazKraj(krajElement) {
   }
 }
 
-Promise.all([
-  fetch("data.json").then(res => res.json()),
-  fetch("populacia.json").then(res => res.json())
-])
-  .then(([jsonData, popData]) => {
-    data = jsonData;
-    populaciaData = popData;
-
-    const roky = [...new Set(data.map(i => i.rok))].sort((a, b) => a - b);
-    naplnRokyGrafu(roky);
-
-    roky.forEach(r => {
-      const opt = document.createElement("option");
-      opt.value = r;
-      opt.textContent = r;
-      rokSelect.appendChild(opt);
-    });
-
-
-    if (roky.length > 0) {
-      rokSelect.value = roky[roky.length - 1];
-    }
-
-    zafarbiKraje();
-    zobrazSlovensko();
-    aktualizujGraf();
-  })
-  .catch(error => {
-    console.error("Chyba pri načítaní dát:", error);
-  });
-
-kraje.forEach(kraj => {
-  kraj.addEventListener("click", function () {
-    if (aktivnyKraj === kraj) {
-      kraj.style.stroke = "#333";
-      kraj.style.strokeWidth = "1";
-      aktivnyKraj = null;
-      zobrazSlovensko();
-      aktualizujGraf();
-      return;
-    }
-
-    if (aktivnyKraj) {
-      aktivnyKraj.style.stroke = "#333";
-      aktivnyKraj.style.strokeWidth = "1";
-    }
-
-    kraj.style.stroke = "#2bff00";
-    kraj.style.strokeWidth = "4";
-    aktivnyKraj = kraj;
-    kraj.parentNode.appendChild(kraj);
-
-    zobrazKraj(kraj);
-    aktualizujGraf();
-  });
-});
-
-rokSelect.addEventListener("change", () => {
-  zafarbiKraje();
-  if (aktivnyKraj) {
-    zobrazKraj(aktivnyKraj);
-  } else {
-    zobrazSlovensko();
-  }
-
-  aktualizujGraf();
-});
-
-
-//tlačidlá
-crimeButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const hlavnaKategoria = button.dataset.druh;
-    const podkategorie = podkategoriePodlaHlavnej[hlavnaKategoria] || [];
-
-    if (aktivneDruhy.includes(hlavnaKategoria)) {
-      aktivneDruhy = aktivneDruhy.filter(item => item !== hlavnaKategoria);
-      button.classList.remove("active");
-    } else {
-      // hlavná kategória sa vyberá, preto odstránime jej podkategórie
-      aktivneDruhy = aktivneDruhy.filter(item => !podkategorie.includes(item));
-
-      document.querySelectorAll(".crime-dropdown button").forEach(dropdownBtn => {
-        if (podkategorie.includes(dropdownBtn.dataset.druh)) {
-          dropdownBtn.classList.remove("active");
-        }
-      });
-
-      aktivneDruhy.push(hlavnaKategoria);
-      button.classList.add("active");
-    }
-
-    zafarbiKraje();
-
-    if (aktivnyKraj) {
-      zobrazKraj(aktivnyKraj);
-    } else {
-      zobrazSlovensko();
-    }
-
-    aktualizujGraf();
-  });
-});
-
-//dropdown
-crimeArrows.forEach(arrow => {
-  arrow.addEventListener("click", (event) => {
-    event.stopPropagation();
-
-    const menuId = "menu-" + arrow.dataset.menu;
-    const menu = document.getElementById(menuId);
-
-    menu.classList.toggle("show");
-  });
-});
-
-crimeDropdownButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const podkategoria = button.dataset.druh;
-    const hlavnaKategoria = najdiHlavnuKategoriuPrePodkategoriu(podkategoria);
-
-    if (aktivneDruhy.includes(podkategoria)) {
-      aktivneDruhy = aktivneDruhy.filter(item => item !== podkategoria);
-      button.classList.remove("active");
-    } else {
-      // podkategória sa vyberá, preto odstránime jej hlavnú kategóriu
-      if (hlavnaKategoria) {
-        aktivneDruhy = aktivneDruhy.filter(item => item !== hlavnaKategoria);
-
-        document.querySelectorAll(".crime-btn").forEach(mainBtn => {
-          if (mainBtn.dataset.druh === hlavnaKategoria) {
-            mainBtn.classList.remove("active");
-          }
-        });
-      }
-
-      aktivneDruhy.push(podkategoria);
-      button.classList.add("active");
-    }
-
-    // dropdown zámerne nezatvárame, aby sa dalo vybrať viac podkategórií
-
-    zafarbiKraje();
-
-    if (aktivnyKraj) {
-      zobrazKraj(aktivnyKraj);
-    } else {
-      zobrazSlovensko();
-    }
-
-    aktualizujGraf();
-  });
-});
-
-
-//sucet
-function spocitajZaznamy(zaznamy) {
-  return zaznamy.reduce((acc, item) => {
-    acc.zistene += item.zistene || 0;
-    acc.objasnene += item.objasnene || 0;
-    acc.skoda += skodaVEurach(item);
-    acc.alkohol += item.vplyv_alkoholu || 0;
-    acc.drogy += item.vplyv_drog || 0;
-    return acc;
-  }, {
-    zistene: 0,
-    objasnene: 0,
-    skoda: 0,
-    alkohol: 0,
-    drogy: 0
-  });
-}
-
-function formatCeleCislo(hodnota) {
-  return hodnota.toLocaleString("sk-SK");
-}
-
-function formatDesatinneCislo(hodnota) {
-  return hodnota.toLocaleString("sk-SK", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
+// Tooltip mapy
 
 function vytvorObsahTooltipu(krajElement) {
   const nazov = mappingKrajov[krajElement.id];
@@ -662,6 +518,7 @@ function posunTooltip(event) {
   }
 }
 
+// Text výberu
 
 function zobrazTextVyberu(druhy) {
   if (aktivneDruhy.length === 0) {
@@ -671,48 +528,7 @@ function zobrazTextVyberu(druhy) {
   return druhy.map(druh => zobrazNazovKriminality(druh)).join(", ");
 }
 
-document.addEventListener("click", (event) => {
-  const clickedInsideCrimeBar = event.target.closest(".crime-bar");
-
-  if (!clickedInsideCrimeBar) {
-    document.querySelectorAll(".crime-dropdown").forEach(dropdown => {
-      dropdown.classList.remove("show");
-    });
-  }
-});
-
-resetVyberBtn.addEventListener("click", () => {
-  // vymaže všetky vybrané druhy kriminality
-  aktivneDruhy = [];
-
-  // odznačí hlavné tlačidlá
-  crimeButtons.forEach(button => {
-    button.classList.remove("active");
-  });
-
-  // odznačí podkategórie
-  crimeDropdownButtons.forEach(button => {
-    button.classList.remove("active");
-  });
-
-  // zavrie všetky dropdowny
-  document.querySelectorAll(".crime-dropdown").forEach(dropdown => {
-    dropdown.classList.remove("show");
-  });
-
-  // prekreslí mapu
-  zafarbiKraje();
-
-  // ak je vybraný kraj, zobrazí ten kraj s celkovou kriminalitou
-  // ak nie je vybraný kraj, zobrazí Slovensko s celkovou kriminalitou
-  if (aktivnyKraj) {
-    zobrazKraj(aktivnyKraj);
-  } else {
-    zobrazSlovensko();
-  }
-
-  aktualizujGraf();
-});
+// Nastavenie rokov grafu
 
 function naplnRokyGrafu(roky) {
   grafRokOdSelect.innerHTML = "";
@@ -735,6 +551,8 @@ function naplnRokyGrafu(roky) {
     grafRokDoSelect.value = roky[roky.length - 1];
   }
 }
+
+// Výpočty a popisy grafu
 
 function vypocitajHodnotuGrafu(sucet, populacia, ukazovatel) {
   if (ukazovatel === "zistene") {
@@ -904,24 +722,24 @@ function aktualizujGraf() {
     data: {
       labels: roky,
       datasets: [
-       {
-        label: `${nazovUkazovatelaLegenda} – ${nazovOblasti} – ${nazovVyberu}`,
-        data: hodnoty,
-        tension: 0.25,
-        borderWidth: 3,
-        pointRadius: 4,
-        pointHoverRadius: 6
-      },
-      {
-        label: "Trendová spojnica",
-        data: trendoveHodnoty,
-        tension: 0,
-        borderWidth: 2,
-        borderDash: [6, 6],
-        pointRadius: 0,
-        pointHoverRadius: 0
-          }
-        ]
+        {
+          label: `${nazovUkazovatelaLegenda} – ${nazovOblasti} – ${nazovVyberu}`,
+          data: hodnoty,
+          tension: 0.25,
+          borderWidth: 3,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        },
+        {
+          label: "Trendová spojnica",
+          data: trendoveHodnoty,
+          tension: 0,
+          borderWidth: 2,
+          borderDash: [6, 6],
+          pointRadius: 0,
+          pointHoverRadius: 0
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -959,28 +777,227 @@ function aktualizujGraf() {
           }
         }
       },
-
-scales: {
-  x: {
-    ticks: {
-      display: true,
-      autoSkip: false,
-      maxRotation: 45,
-      minRotation: 45,
-      padding: 10
+      scales: {
+        x: {
+          ticks: {
+            display: true,
+            autoSkip: false,
+            maxRotation: 45,
+            minRotation: 45,
+            padding: 10
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            maxTicksLimit: 6
+          }
+        }
+      }
     }
-  },
-  y: {
-    beginAtZero: true,
-    ticks: {
-      maxTicksLimit: 6
-    }
-  }
-}
-}
   });
 }
 
+// Načítanie dát
+
+Promise.all([
+  fetch("data.json").then(res => res.json()),
+  fetch("populacia.json").then(res => res.json())
+])
+  .then(([jsonData, popData]) => {
+    data = jsonData;
+    populaciaData = popData;
+
+    const roky = [...new Set(data.map(i => i.rok))].sort((a, b) => a - b);
+    naplnRokyGrafu(roky);
+
+    roky.forEach(r => {
+      const opt = document.createElement("option");
+      opt.value = r;
+      opt.textContent = r;
+      rokSelect.appendChild(opt);
+    });
+
+    if (roky.length > 0) {
+      rokSelect.value = roky[roky.length - 1];
+    }
+
+    zafarbiKraje();
+    zobrazSlovensko();
+    aktualizujGraf();
+  })
+  .catch(error => {
+    console.error("Chyba pri načítaní dát:", error);
+  });
+
+// Udalosti mapy a filtrov
+
+kraje.forEach(kraj => {
+  kraj.addEventListener("click", function () {
+    if (aktivnyKraj === kraj) {
+      kraj.style.stroke = "#333";
+      kraj.style.strokeWidth = "1";
+      aktivnyKraj = null;
+      zobrazSlovensko();
+      aktualizujGraf();
+      return;
+    }
+
+    if (aktivnyKraj) {
+      aktivnyKraj.style.stroke = "#333";
+      aktivnyKraj.style.strokeWidth = "1";
+    }
+
+    kraj.style.stroke = "#2bff00";
+    kraj.style.strokeWidth = "4";
+    aktivnyKraj = kraj;
+    kraj.parentNode.appendChild(kraj);
+
+    zobrazKraj(kraj);
+    aktualizujGraf();
+  });
+});
+
+rokSelect.addEventListener("change", () => {
+  zafarbiKraje();
+  if (aktivnyKraj) {
+    zobrazKraj(aktivnyKraj);
+  } else {
+    zobrazSlovensko();
+  }
+
+  aktualizujGraf();
+});
+
+// Tlačidlá filtrov
+crimeButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const hlavnaKategoria = button.dataset.druh;
+    const podkategorie = podkategoriePodlaHlavnej[hlavnaKategoria] || [];
+
+    if (aktivneDruhy.includes(hlavnaKategoria)) {
+      aktivneDruhy = aktivneDruhy.filter(item => item !== hlavnaKategoria);
+      button.classList.remove("active");
+    } else {
+      // hlavná kategória sa vyberá, preto odstránime jej podkategórie
+      aktivneDruhy = aktivneDruhy.filter(item => !podkategorie.includes(item));
+
+      document.querySelectorAll(".crime-dropdown button").forEach(dropdownBtn => {
+        if (podkategorie.includes(dropdownBtn.dataset.druh)) {
+          dropdownBtn.classList.remove("active");
+        }
+      });
+
+      aktivneDruhy.push(hlavnaKategoria);
+      button.classList.add("active");
+    }
+
+    zafarbiKraje();
+
+    if (aktivnyKraj) {
+      zobrazKraj(aktivnyKraj);
+    } else {
+      zobrazSlovensko();
+    }
+
+    aktualizujGraf();
+  });
+});
+
+// Dropdowny filtrov
+crimeArrows.forEach(arrow => {
+  arrow.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    const menuId = "menu-" + arrow.dataset.menu;
+    const menu = document.getElementById(menuId);
+
+    menu.classList.toggle("show");
+  });
+});
+
+crimeDropdownButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const podkategoria = button.dataset.druh;
+    const hlavnaKategoria = najdiHlavnuKategoriuPrePodkategoriu(podkategoria);
+
+    if (aktivneDruhy.includes(podkategoria)) {
+      aktivneDruhy = aktivneDruhy.filter(item => item !== podkategoria);
+      button.classList.remove("active");
+    } else {
+      // podkategória sa vyberá, preto odstránime jej hlavnú kategóriu
+      if (hlavnaKategoria) {
+        aktivneDruhy = aktivneDruhy.filter(item => item !== hlavnaKategoria);
+
+        document.querySelectorAll(".crime-btn").forEach(mainBtn => {
+          if (mainBtn.dataset.druh === hlavnaKategoria) {
+            mainBtn.classList.remove("active");
+          }
+        });
+      }
+
+      aktivneDruhy.push(podkategoria);
+      button.classList.add("active");
+    }
+
+    // dropdown zámerne nezatvárame, aby sa dalo vybrať viac podkategórií
+
+    zafarbiKraje();
+
+    if (aktivnyKraj) {
+      zobrazKraj(aktivnyKraj);
+    } else {
+      zobrazSlovensko();
+    }
+
+    aktualizujGraf();
+  });
+});
+
+document.addEventListener("click", (event) => {
+  const clickedInsideCrimeBar = event.target.closest(".crime-bar");
+
+  if (!clickedInsideCrimeBar) {
+    document.querySelectorAll(".crime-dropdown").forEach(dropdown => {
+      dropdown.classList.remove("show");
+    });
+  }
+});
+
+// vymaže všetky vybrané druhy kriminality
+resetVyberBtn.addEventListener("click", () => {
+  aktivneDruhy = [];
+
+  // odznačí hlavné tlačidlá
+  crimeButtons.forEach(button => {
+    button.classList.remove("active");
+  });
+
+  // odznačí podkategórie
+  crimeDropdownButtons.forEach(button => {
+    button.classList.remove("active");
+  });
+
+  // zavrie všetky dropdowny
+  document.querySelectorAll(".crime-dropdown").forEach(dropdown => {
+    dropdown.classList.remove("show");
+  });
+
+  // prekreslí mapu
+  zafarbiKraje();
+
+  // ak je vybraný kraj, zobrazí ten kraj s celkovou kriminalitou
+  // ak nie je vybraný kraj, zobrazí Slovensko s celkovou kriminalitou
+  if (aktivnyKraj) {
+    zobrazKraj(aktivnyKraj);
+  } else {
+    zobrazSlovensko();
+  }
+
+  aktualizujGraf();
+});
+
+// Udalosti grafu
 
 stiahnutGrafBtn.addEventListener("click", () => {
   if (!grafCanvas) {
@@ -1017,6 +1034,11 @@ stiahnutGrafBtn.addEventListener("click", () => {
   link.click();
 });
 
+grafRokOdSelect.addEventListener("change", aktualizujGraf);
+grafRokDoSelect.addEventListener("change", aktualizujGraf);
+grafUkazovatelSelect.addEventListener("change", aktualizujGraf);
+
+// Tooltip udalosti
 
 kraje.forEach(kraj => {
   kraj.addEventListener("mouseenter", (event) => {
@@ -1035,6 +1057,8 @@ kraje.forEach(kraj => {
   });
 });
 
+// Prepínač farbenia mapy
+
 if (mapColorToggle) {
   mapColorToggle.addEventListener("click", () => {
     if (rezimFarbeniaMapy === "zistene") {
@@ -1050,10 +1074,3 @@ if (mapColorToggle) {
     zafarbiKraje();
   });
 }
-
-
-grafRokOdSelect.addEventListener("change", aktualizujGraf);
-grafRokDoSelect.addEventListener("change", aktualizujGraf);
-grafUkazovatelSelect.addEventListener("change", aktualizujGraf);
-
-
