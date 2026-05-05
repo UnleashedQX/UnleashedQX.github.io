@@ -37,6 +37,7 @@ const grafRokDoSelect = document.getElementById("graf-rok-do");
 const grafUkazovatelSelect = document.getElementById("graf-ukazovatel");
 const grafCanvas = document.getElementById("grafVyvoja");
 const stiahnutGrafBtn = document.getElementById("stiahnut-graf");
+const grafKomentar = document.getElementById("graf-komentar");
 
 const mapTooltip = document.getElementById("map-tooltip");
 
@@ -637,6 +638,35 @@ function vypocitajTrendovuSpojnicu(roky, hodnoty) {
   return roky.map(rok => sklon * rok + posun);
 }
 
+function vytvorKomentarTrendu(trendoveHodnoty) {
+  if (!trendoveHodnoty || trendoveHodnoty.length < 2) {
+    return "Na vyhodnotenie trendu nie je dostupný dostatočný počet rokov.";
+  }
+
+  const prvaHodnota = trendoveHodnoty[0];
+  const poslednaHodnota = trendoveHodnoty[trendoveHodnoty.length - 1];
+
+  const rozdiel = poslednaHodnota - prvaHodnota;
+
+  const zaklad = Math.abs(prvaHodnota) > 0
+    ? Math.abs(prvaHodnota)
+    : Math.max(...trendoveHodnoty.map(hodnota => Math.abs(hodnota)));
+
+  const percentoZmeny = zaklad > 0
+    ? (rozdiel / zaklad) * 100
+    : 0;
+
+  if (Math.abs(percentoZmeny) < 1) {
+    return "Vo vybranom období je ukazovateľ približne stabilný.";
+  }
+
+  if (percentoZmeny > 0) {
+    return "Vo vybranom období má ukazovateľ rastúci trend.";
+  }
+
+  return "Vo vybranom období má ukazovateľ klesajúci trend.";
+}
+
 function aktualizujGraf() {
   if (!grafCanvas || data.length === 0 || populaciaData.length === 0) {
     return;
@@ -712,6 +742,10 @@ function aktualizujGraf() {
   const nazovUkazovatelaLegenda = grafUkazovatelSelect.options[grafUkazovatelSelect.selectedIndex].text;
   const nazovVyberu = zobrazTextVyberu(vybraneDruhy);
   const trendoveHodnoty = vypocitajTrendovuSpojnicu(roky, hodnoty);
+
+  if (grafKomentar) {
+  grafKomentar.textContent = vytvorKomentarTrendu(trendoveHodnoty);
+  }
 
   if (grafVyvoja) {
     grafVyvoja.destroy();
