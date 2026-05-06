@@ -29,6 +29,10 @@ const crimeDropdownButtons = document.querySelectorAll(".crime-dropdown button")
 const resetVyberBtn = document.getElementById("reset-vyber");
 const mapColorToggle = document.getElementById("map-color-toggle");
 
+const introModal = document.getElementById("intro-modal");
+const introCloseBtn = document.getElementById("intro-close");
+const introNeverCheckbox = document.getElementById("intro-never");
+
 // Nastavenia a mapovania
 
 const grafNazov = document.getElementById("graf-nazov");
@@ -1108,3 +1112,51 @@ if (mapColorToggle) {
     zafarbiKraje();
   });
 }
+
+function otvorIntroModal() {
+  if (!introModal) {
+    return;
+  }
+
+  const introSkryte = localStorage.getItem("introSkryte");
+
+  if (introSkryte === "true") {
+    return;
+  }
+
+  introModal.classList.add("show");
+  introModal.setAttribute("aria-hidden", "false");
+}
+
+function zatvorIntroModal() {
+  if (!introModal) {
+    return;
+  }
+
+  if (introNeverCheckbox && introNeverCheckbox.checked) {
+    localStorage.setItem("introSkryte", "true");
+  }
+
+  introModal.classList.remove("show");
+  introModal.setAttribute("aria-hidden", "true");
+}
+
+window.addEventListener("load", otvorIntroModal);
+
+if (introCloseBtn) {
+  introCloseBtn.addEventListener("click", zatvorIntroModal);
+}
+
+if (introModal) {
+  introModal.addEventListener("click", event => {
+    if (event.target === introModal) {
+      zatvorIntroModal();
+    }
+  });
+}
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    zatvorIntroModal();
+  }
+});

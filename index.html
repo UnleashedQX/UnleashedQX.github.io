@@ -243,7 +243,39 @@
     </div>
 
     <p id="graf-komentar" class="graf-komentar"></p>
+
   </div>
+
+<div id="intro-modal" class="intro-modal" aria-hidden="true">
+  <div class="intro-modal-content">
+    <h2>Vitajte v interaktívnej mape kriminality SR</h2>
+
+    <p>
+      Tento nástroj umožňuje zobrazovať a porovnávať údaje o kriminalite
+      v jednotlivých krajoch Slovenskej republiky.
+    </p>
+
+    <ul>
+      <li>Vyberte rok, ktorý chcete sledovať.</li>
+      <li>Kliknutím na kraj zobrazíte podrobné údaje v informačnom paneli.</li>
+      <li>Pomocou hornej lišty môžete vybrať druh kriminality alebo konkrétne podkategórie.</li>
+      <li>Kliknutím na červené tlačidlo odstránite všetky aktívne filtre.</li>
+      <li>Mapa sa dá prepínať medzi počtom zistených trestných činov a indexom kriminality.</li>
+      <li>Po prejdení myšou nad krajom sa zobrazí tooltip so základnými údajmi o vybranom kraji.</li>
+      <li>V informačnom paneli sú pri vybraných ukazovateľoch doplnené tooltipy s krátkym vysvetlením.</li>
+      <li>Graf zobrazuje vývoj vybraného ukazovateľa v čase podľa zvoleného obdobia.</li>
+    </ul>
+
+    <label class="intro-checkbox">
+      <input type="checkbox" id="intro-never">
+      Nabudúce nezobrazovať
+    </label>
+
+    <button id="intro-close" class="intro-close-btn">
+      Začať používať nástroj
+    </button>
+  </div>
+</div>
 
   <div id="map-tooltip" class="map-tooltip"></div>
 
