@@ -849,7 +849,7 @@ Promise.all([
     const roky = [...new Set(data.map(i => i.rok))].sort((a, b) => a - b);
     naplnRokyGrafu(roky);
 
-    roky.forEach(r => {
+    [...roky].reverse().forEach(r => {
       const opt = document.createElement("option");
       opt.value = r;
       opt.textContent = r;
