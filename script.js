@@ -367,8 +367,8 @@ function zobrazSlovensko() {
   percentoSpan.textContent = percento.toLocaleString("sk-SK", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }) + "%";
-  skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + "€";
+  }) + " %";
+  skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + " €";
   alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
   drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
   obyvateliaSpan.textContent = populaciaSpolu > 0 ? populaciaSpolu.toLocaleString("sk-SK") : "-";
@@ -411,8 +411,8 @@ function zobrazKraj(krajElement) {
     percentoSpan.textContent = percento.toLocaleString("sk-SK", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }) + "%";
-    skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + "€";
+    }) + " %";
+    skodaSpan.textContent = Math.round(sucet.skoda).toLocaleString("sk-SK") + " €";
     alkoholSpan.textContent = sucet.alkohol.toLocaleString("sk-SK");
     drogySpan.textContent = sucet.drogy.toLocaleString("sk-SK");
 
@@ -800,7 +800,7 @@ function aktualizujGraf() {
               if (ukazovatel === "percento") {
                 jednotka = " %";
               } else if (ukazovatel === "skoda") {
-                jednotka = " €";
+                jednotka = "  €";
               }
 
               if (ukazovatel === "skoda") {
